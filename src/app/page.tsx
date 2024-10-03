@@ -4,6 +4,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { IoIosFootball } from 'react-icons/io'
 import Modal from '@/components/Modal'
 import { useState } from 'react'
+import { Toaster } from '@/components/ui/toaster'
 
 export default function Home() {
   const [isOpen, setIsOpen] = useState(false)
@@ -376,6 +377,7 @@ export default function Home() {
         </div>
       </div>
       <Modal isOpen={isOpen} setIsOpen={setIsOpen} />
+      <Toaster />
     </div>
   )
 }
