@@ -6,11 +6,10 @@ import { convertToVND } from '@/lib/utils'
 type Props = {}
 
 export default async function Header({}: Props) {
-  // const userInfo  = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/v1/2`).then((res) => res.json())
-  const userInfo  = await fetch(`https://betting-simulator-two.vercel.app/api/v1/2`).then((res) => res.json())
+  const userInfo  = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/v1/2`).then((res) => res.json())
+  // const userInfo  = await fetch(`https://betting-simulator-two.vercel.app/api/v1/2`).then((res) => res.json())
   const {name ,money } = userInfo.result[0]
-  console.log(userInfo.result[0]);
-  
+
   return (
     <div className='flex items-center justify-between p-4 shadow-lg rounded-lg bg-slate-800  text-sm'>
       <div>
