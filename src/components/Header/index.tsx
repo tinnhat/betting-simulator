@@ -3,12 +3,23 @@ import { Button } from '../ui/button'
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar'
 import { convertToVND } from '@/lib/utils'
 
-type Props = {}
+type Props = {
+  userInfo: {
+    name: string;
+    money: number;
+  };
+}
 
-export default async function Header({}: Props) {
-  const userInfo  = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/v1/2`).then((res) => res.json())
-  // const userInfo  = await fetch(`https://betting-simulator-two.vercel.app/api/v1/2`).then((res) => res.json())
-  const {name ,money } = userInfo.result[0]
+export async function getServerSideProps() {
+  const userInfo = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/v1/2`).then((res) => res.json());
+  return {
+    props: {
+      userInfo: userInfo.result[0], // Pass it to your component
+    },
+  };
+}
+export default async function Header({ userInfo }: Props) {
+  const { name, money } = userInfo;
 
   return (
     <div className='flex items-center justify-between p-4 shadow-lg rounded-lg bg-slate-800  text-sm'>
