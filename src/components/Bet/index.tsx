@@ -4,36 +4,57 @@ import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar'
 import Modal from '../Modal'
 import { useToast } from '@/hooks/use-toast'
 import { Button } from '../ui/button'
-interface MatchInfo {
-  id: string
-  away_team: string
-  commence_time: string
-  home_team: string
-  sport_key: string
-  sport_title: string
-}
+import { dataMock } from './mockData'
+
 type Props = {}
-const teamChoose = 'Manchester City'
 export default function Bet({}: Props) {
   const { toast } = useToast()
   const [isOpen, setIsOpen] = useState(false)
   const [matchs, setMatchs] = useState<MatchInfo[]>([])
   const [position, setPosition] = useState(0)
   const [matchShow, setMatchShow] = useState<MatchInfo>({} as MatchInfo)
+  const [oddChoose, setOddChoose] = useState<OddBet>({} as OddBet)
   const getMatchComing = async () => {
     try {
-      const response = await fetch(
-        `https://api.the-odds-api.com/v4/sports/soccer_epl/events?apiKey=${process.env.NEXT_PUBLIC_THE_ODDS_API_KEY}`,
-      )
-      const result = await response.json()
-      const listMatch = result.filter(
-        (item: MatchInfo) =>
-          item.home_team.toLowerCase() === teamChoose.toLowerCase() ||
-          item.away_team.toLowerCase() === teamChoose.toLowerCase()
-      )
+      // const response = await fetch(
+      //   `https://api.the-odds-api.com/v4/sports/soccer_epl/events?apiKey=${process.env.NEXT_PUBLIC_THE_ODDS_API_KEY}`
+      // )
+      // const result = await response.json()
+      // const listMatch = result.filter(
+      //   (item: MatchInfo) =>
+      //     item.home_team.toLowerCase() === teamChoose.toLowerCase() ||
+      //     item.away_team.toLowerCase() === teamChoose.toLowerCase()
+      // )
+      // console.log(listMatch);
+      const listMatch: MatchInfo[] = [
+        {
+          id: '08a9e3241c27d9fbb3aa3f1950527c63',
+          sport_key: 'soccer_epl',
+          sport_title: 'EPL',
+          commence_time: '2024-10-20T13:00:00Z',
+          home_team: 'Wolverhampton Wanderers',
+          away_team: 'Manchester City',
+        },
+        {
+          id: '9427f05d52b3b209f92f465b6acda0d1',
+          sport_key: 'soccer_epl',
+          sport_title: 'EPL',
+          commence_time: '2024-10-26T14:00:00Z',
+          home_team: 'Manchester City',
+          away_team: 'Southampton',
+        },
+      ]
+
+      const matchChoose = listMatch[0]
+      matchChoose.img_home = await getImageBadgeTeam(matchChoose.home_team)
+      matchChoose.img_away = await getImageBadgeTeam(matchChoose.away_team)
+
+      getImageBadgeTeam(matchChoose.away_team)
       setMatchs(listMatch)
       setPosition(0)
-      setMatchShow(listMatch[0])
+      //call api get image
+
+      setMatchShow(matchChoose)
     } catch (error) {
       console.log(error)
       toast({
@@ -44,13 +65,33 @@ export default function Bet({}: Props) {
     }
   }
 
+  const getImageBadgeTeam = async (team: string) => {
+    let image: string = ''
+    try {
+      const response = await fetch(
+        `https://www.thesportsdb.com/api/v1/json/3/searchteams.php?t=${team}`
+      )
+      const result = await response.json()
+      if (result.teams === null) return ''
+      image = result.teams[0].strBadge
+    } catch (error) {
+      console.log(error)
+    }
+    return image
+  }
+
   useEffect(() => {
     getMatchComing()
   }, [])
 
   useEffect(() => {
     if (matchs.length > 0) {
-      setMatchShow(matchs[position])
+      ;(async () => {
+        const matchFind = matchs[position]
+        matchFind.img_home = await getImageBadgeTeam(matchFind.home_team)
+        matchFind.img_away = await getImageBadgeTeam(matchFind.away_team)
+        setMatchShow(matchs[position])
+      })()
     }
   }, [position])
 
@@ -60,6 +101,11 @@ export default function Bet({}: Props) {
 
   const handlePrevMatch = () => {
     setPosition(prev => prev - 1)
+  }
+
+  const handleChooseBet = (market: string, title: string, price: number, team: string) => {
+    setOddChoose({ market, title, price, team })
+    setIsOpen(true)
   }
 
   return (
@@ -84,10 +130,7 @@ export default function Bet({}: Props) {
             {/* team 1 */}
             <div className='w-2/5 text-center flex flex-col justify-center items-center'>
               <Avatar className='w-20 h-20'>
-                <AvatarImage
-                  src='https://www.thesportsdb.com/images/media/team/badge/vwpvry1467462651.png'
-                  alt='@shadcn'
-                />
+                <AvatarImage src={matchShow?.img_home} alt={matchShow?.home_team} />
                 <AvatarFallback>{matchShow?.home_team}</AvatarFallback>
               </Avatar>
               <p className='mt-2 text-blue-400 font-bold'>{matchShow?.home_team} (H)</p>
@@ -97,45 +140,58 @@ export default function Bet({}: Props) {
             </div>
             <div className='w-2/5 text-center flex flex-col justify-center items-center'>
               <Avatar className='w-20 h-20'>
-                <AvatarImage
-                  src='https://www.thesportsdb.com/images/media/team/badge/vwpvry1467462651.png'
-                  alt='@shadcn'
-                />
-                <AvatarFallback>{matchShow?.home_team}</AvatarFallback>
+                <AvatarImage src={matchShow?.img_away} alt={matchShow?.away_team} />
+                <AvatarFallback>{matchShow?.away_team}</AvatarFallback>
               </Avatar>
               <p className='mt-2 text-blue-400 font-bold'>{matchShow?.away_team}</p>
             </div>
           </div>
           {/* odds */}
           <p className='text-green-600 font-bold mt-6'>Odds</p>
-          <div className='mt-6 w-full'>
-            {/* team 1 */}
-            <p className='font-bold'>{matchShow?.home_team}</p>
-            <div className='flex items-center text-sm'>
-              <p>Handicap</p>
-              <p
-                onClick={() => setIsOpen(true)}
-                className='text-green-400 cursor-pointer hover:text-green-200 transition-colors duration-300 ml-4'
-              >
-                2.4
-              </p>
-            </div>
-            <hr className='my-4 border-gray-400' />
-            {/* team 2 */}
-            <p className='font-bold'>{matchShow?.away_team}</p>
-            <div className='flex items-center text-sm'>
-              <p>Handicap</p>
-              <p
-                onClick={() => setIsOpen(true)}
-                className='text-green-400 cursor-pointer hover:text-green-200 transition-colors duration-300 ml-4'
-              >
-                2.4
-              </p>
-            </div>
+          <div className='mt-6 w-full max-h-64 overflow-auto'>
+            <ul className='flex flex-col gap-2'>
+              {dataMock.bookmakers.map((item: BookmakerInfo) => (
+                <>
+                  <li className='w-full' key={item.key}>
+                    <h6 className='text-blue-600 font-bold text-sm'>{item.title}</h6>
+                    {item.markets.map((market: MarketsInfo, idx: number) => (
+                      <div key={idx} className='flex justify-between items-center w-full mt-2'>
+                        <div className='w-1/6 text-sm'>
+                          Odd: <span className='font-bold'>{market.key.toUpperCase()}</span>
+                        </div>
+                        <div className='w-5/6 flex justify-between items-center text-sm text-gray-200'>
+                          {market.outcomes.map((outcome: OutComes, index: number) => (
+                            <div key={index} className='w-1/3 text-center'>
+                              <p className='whitespace-nowrap'>
+                                {outcome.name}
+                                <span
+                                  onClick={() =>
+                                    handleChooseBet(
+                                      item.title,
+                                      market.key,
+                                      outcome.price,
+                                      outcome.name
+                                    )
+                                  }
+                                  className='text-green-400 cursor-pointer hover:text-green-200 transition-colors duration-300 ml-4'
+                                >
+                                  {outcome.price}
+                                </span>
+                              </p>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    ))}
+                  </li>
+                  <hr className='my-4 border-gray-400' />
+                </>
+              ))}
+            </ul>
           </div>
         </div>
+        <Modal isOpen={isOpen} setIsOpen={setIsOpen} oddChoose={oddChoose} />
       </div>
-      <Modal isOpen={isOpen} setIsOpen={setIsOpen} />
     </>
   )
 }

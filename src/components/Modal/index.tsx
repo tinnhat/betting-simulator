@@ -3,13 +3,16 @@ import { Dialog, DialogContent, DialogDescription, DialogTitle } from '@/compone
 import { Input } from '../ui/input'
 import { Button } from '../ui/button'
 import { useToast } from '@/hooks/use-toast'
+import { useState } from 'react'
 
 type Props = {
   isOpen: boolean
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>
+  oddChoose: OddBet
 }
-function Modal({ isOpen, setIsOpen }: Props) {
+function Modal({ isOpen, setIsOpen,oddChoose }: Props) {
   const { toast } = useToast()
+  const [moneyBet,setMoneyBet] = useState(0)
   const handleConfirm = () => {
     toast({
       title: 'Confirm bet',
@@ -24,13 +27,13 @@ function Modal({ isOpen, setIsOpen }: Props) {
       {/* Dialog component */}
       <Dialog open={isOpen} onOpenChange={setIsOpen}>
         <DialogContent>
-          <DialogTitle>Confirm bet</DialogTitle>
+          <DialogTitle>Confirm bet -  <span className='text-blue-300'>{oddChoose.market}</span> </DialogTitle>
           <DialogDescription>
-            <p className='text-lg text-black font-bold'> Manchester United</p>
+            <p className='text-lg text-black font-bold'>{oddChoose.team}</p>
             <p className='font-semibold'>
-              Odd: Handicap <span className='text-green-500'>0.5</span>
+              Odd: {oddChoose.title} <span className='text-green-500'>{oddChoose.price}</span>
             </p>
-            <Input type='number' />
+            <Input value={moneyBet} onChange={(e) => setMoneyBet(Number(e.target.value))} min={0} max={9999999999} step={1000} type='number' />
           </DialogDescription>
           <div className='flex justify-end gap-2'>
             <Button variant={'destructive'} onClick={() => setIsOpen(false)}>
