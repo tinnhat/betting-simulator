@@ -11,8 +11,8 @@ type UserInfo = {
 }
 
 export async function getData() {
-  const userInfo = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/v1/2`).then(res => res.json())
-  return userInfo.result[0]
+  const userInfo = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/v1/3`).then(res => res.json())
+  return userInfo.result
 }
 export default async function Header({}: Props) {
   const data: UserInfo = await getData()

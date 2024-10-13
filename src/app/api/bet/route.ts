@@ -53,7 +53,7 @@ export async function POST(req: NextRequest) {
       );
       // Step 2: Insert into table bet
       const currentDate = new Date();
-      const newId = insertTableResult.rows[0].id;
+      const newId = insertTableResult.rows[0]?.id;
       const insertTableBet = await sql`
           INSERT INTO "bet" ("create_time","home_team","away_team","odd","rate","money_bet","eventid_oddsapi","userid","resultid")
           VALUES (${currentDate.toISOString()},${home_team},${away_team},${odd},${rate},${money_bet},${eventid_oddsapi},${userid},${newId})
