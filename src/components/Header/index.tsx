@@ -10,14 +10,13 @@ type UserInfo = {
   money: number
 }
 
-export async function getData() {
-  const userInfo = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/v1/3`).then(res => res.json())
+export async function getData(userId: number) {
+  const userInfo = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/v1/${userId}`).then(res => res.json())
   return userInfo.result
 }
 export default async function Header({}: Props) {
-  const data: UserInfo = await getData()
-  const { name, money } = data
-  
+  const data: UserInfo = await getData(1)
+
   return (  
     <div className='flex items-center justify-between p-4 shadow-lg rounded-lg bg-slate-800  text-sm'>
       <div>
@@ -33,8 +32,8 @@ export default async function Header({}: Props) {
             <AvatarFallback>CN</AvatarFallback>
           </Avatar>
           <div className='flex flex-col text-white'>
-            <p className='text-gray-200'>{name}</p>
-            <p className=''>{convertToVND(money)}</p>
+            <p className='text-gray-200'>{data?.name}</p>
+            <p className=''>{convertToVND(data?.money)}</p>
           </div>
         </div>
       </div>
