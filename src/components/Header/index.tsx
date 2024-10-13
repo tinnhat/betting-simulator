@@ -17,8 +17,8 @@ export async function getData() {
 export default async function Header({}: Props) {
   const data: UserInfo = await getData()
   const { name, money } = data
-
-  return (
+  
+  return (  
     <div className='flex items-center justify-between p-4 shadow-lg rounded-lg bg-slate-800  text-sm'>
       <div>
         <p className='text-green-600'>SM-FB</p>
