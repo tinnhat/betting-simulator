@@ -1,3 +1,5 @@
+import { StringDecoder } from "string_decoder"
+
 interface MatchInfo {
   id: string
   away_team: string
@@ -34,11 +36,17 @@ interface MarketsInfo {
 interface OutComes {
   name: string
   price: number
+  point?: number
 }
 
 interface OddBet {
   market:string
-  title: string
-  price: number
-  team: string
+  odd: string
+  money_bet: number
+  home_team?: string
+  away_team?: string
+  rate: number
+  eventid_oddsapi:string
+  league:string
+  date_of_match:string
 }

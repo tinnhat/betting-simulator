@@ -14,6 +14,7 @@ export async function POST(req: NextRequest) {
       league,
       date_of_match,
       userid,
+      market
     } = await req.json();
     // Start a transaction
     await sql`BEGIN`;
@@ -55,8 +56,8 @@ export async function POST(req: NextRequest) {
       const currentDate = new Date();
       const newId = insertTableResult.rows[0]?.id;
       const insertTableBet = await sql`
-          INSERT INTO "bet" ("create_time","home_team","away_team","odd","rate","money_bet","eventid_oddsapi","userid","resultid")
-          VALUES (${currentDate.toISOString()},${home_team},${away_team},${odd},${rate},${money_bet},${eventid_oddsapi},${userid},${newId})
+          INSERT INTO "bet" ("create_time","home_team","away_team","odd","rate","money_bet","eventid_oddsapi","userid","resultid","market")
+          VALUES (${currentDate.toISOString()},${home_team},${away_team},${odd},${rate},${money_bet},${eventid_oddsapi},${userid},${newId}, ${market})
           RETURNING *;
         `;
       loggingInformation(
