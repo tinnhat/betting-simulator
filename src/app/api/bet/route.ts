@@ -14,7 +14,7 @@ export async function POST(req: NextRequest) {
       league,
       date_of_match,
       userid,
-      market
+      market,
     } = await req.json();
     // Start a transaction
     await sql`BEGIN`;
@@ -28,11 +28,10 @@ export async function POST(req: NextRequest) {
           { message: "User not found" },
           { status: 404 }
         );
-      }
-      else {
+      } else {
         //update new money
         const newMoney = userExist.rows[0].money - money_bet;
-        if(newMoney < 0) {
+        if (newMoney < 0) {
           loggingInformation(`User enough money`, "error");
           return NextResponse.json(
             { message: "User enough money" },
@@ -49,7 +48,9 @@ export async function POST(req: NextRequest) {
           RETURNING *;
         `;
       loggingInformation(
-        `insert table result success: ${insertTableResult.rows[0]}`,
+        `insert table result success: ${JSON.stringify(
+          insertTableResult.rows[0]
+        )}`,
         "info"
       );
       // Step 2: Insert into table bet
@@ -61,7 +62,7 @@ export async function POST(req: NextRequest) {
           RETURNING *;
         `;
       loggingInformation(
-        `insert table bet success: ${insertTableBet.rows[0]}`,
+        `insert table bet success: ${JSON.stringify(insertTableBet.rows[0])}`,
         "info"
       );
       // Commit the transaction
