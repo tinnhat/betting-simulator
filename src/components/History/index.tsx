@@ -11,8 +11,6 @@ export default async function History({}: Props) {
       cache: 'no-store', // the latest data is fetched on each request
     }
   ).then((res) => res.json())
-  console.log(listHistory)
-
   return (
     <div className="w-1/5 bg-slate-800 rounded-md min-h-full overflow-y-auto">
       <div className="p-4 text-gray-300">
