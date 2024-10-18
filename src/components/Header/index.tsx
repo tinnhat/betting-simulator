@@ -11,7 +11,7 @@ type UserInfo = {
 };
 export const dynamic = 'force-dynamic'
 export default async function Header({}: Props) {
-  const userInfo = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/v1/1`, {
+  const userInfo = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/v1/2`, {
     cache: 'no-store', // the latest data is fetched on each request
   }).then((res) => res.json());
 

@@ -12,3 +12,9 @@ export async function GET() {
   }
 }
 export const revalidate = 0;
+/*
+This export sets the revalidation behavior for this route. Setting it to 0 means:
+For static rendering: The page will be generated on every request, effectively making it dynamic.
+For server-side rendering: The page will not be cached and will be regenerated on every request.
+By setting revalidate to 0, you're ensuring that this API route always returns fresh data and is never cached.
+*/

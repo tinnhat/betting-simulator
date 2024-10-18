@@ -36,7 +36,7 @@ function Modal({ isOpen, setIsOpen, oddChoose }: Props) {
       const dataSubmit = {
         ...oddChoose,
         money_bet: moneyBet,
-        userid: 1,
+        userid: 2,
       }
       const result = await fetch('api/bet', {
         method: 'POST',
@@ -56,8 +56,8 @@ function Modal({ isOpen, setIsOpen, oddChoose }: Props) {
         setIsOpen(false)
         toast({
           title: 'Bet successfully',
-          description: 'Your bet has been placed', // Ensure this is a string
-          duration: 2000,
+          description: 'Your bet has been placed',
+          className: 'bg-green-500 text-white',
         })
       } else {
         const errorData = await result.json()
@@ -69,7 +69,7 @@ function Modal({ isOpen, setIsOpen, oddChoose }: Props) {
         title: 'Error',
         description:
           error instanceof Error ? error.message : 'An error occurred',
-        duration: 2000,
+        className: 'bg-red-500 text-white',
       })
     } finally {
       setIsLoading(false)

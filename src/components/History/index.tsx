@@ -1,17 +1,17 @@
 import { ResultBet } from '@/app/types'
 import { convertToVND } from '@/lib/utils'
-import React from 'react'
-
+import DeleteBtn from './DeleteBtn'
 type Props = {}
 
 export const dynamic = 'force-dynamic'
 export default async function History({}: Props) {
   const listHistory = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/result/1`,
+    `${process.env.NEXT_PUBLIC_API_URL}/result/2`,
     {
       cache: 'no-store', // the latest data is fetched on each request
     }
   ).then((res) => res.json())
+
   return (
     <div className="w-1/5 bg-slate-800 rounded-md min-h-full overflow-y-auto">
       <div className="p-4 text-gray-300">
@@ -22,10 +22,15 @@ export default async function History({}: Props) {
               key={item.id}
               className="flex flex-col border-t-2 border-solid border-gray-200 pt-2"
             >
-              <p className="text-sm">
-                Match day:{' '}
-                {new Date(item.date_of_match).toLocaleDateString('vi-VN')}
-              </p>
+              <div className="flex justify-between items-center">
+                <p className="text-sm">
+                  Match day:{' '}
+                  {new Date(item.date_of_match).toLocaleDateString('vi-VN')}
+                </p>
+                {new Date(item.date_of_match) > new Date() && (
+                  <DeleteBtn id={item.id}/>
+                )}
+              </div>
               {item.home_team.includes('Over') ||
               item.home_team.includes('Under') ? (
                 <div className="flex gap-4 items-center text-sm">
