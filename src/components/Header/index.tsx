@@ -1,19 +1,19 @@
-import React from 'react'
-import { Button } from '../ui/button'
-import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar'
-import { convertToVND } from '@/lib/utils'
+import React from "react";
+import { Button } from "../ui/button";
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+import { convertToVND } from "@/lib/utils";
 
-type Props = {}
+type Props = {};
 
 type UserInfo = {
-  name: string
-  money: number
-}
-
+  name: string;
+  money: number;
+};
+export const dynamic = 'force-dynamic'
 export default async function Header({}: Props) {
   const userInfo = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/v1/1`, {
-    next: { tags: ['refresh'] },
-  }).then((res) => res.json())
+    cache: 'no-store', // the latest data is fetched on each request
+  }).then((res) => res.json());
 
   return (
     <div className="flex items-center justify-between p-4 shadow-lg rounded-lg bg-slate-800  text-sm">
@@ -21,7 +21,7 @@ export default async function Header({}: Props) {
         <p className="text-green-600">SM-FB</p>
       </div>
       <div className="flex items-center gap-5">
-        <Button variant={'secondary'} size={'sm'}>
+        <Button variant={"secondary"} size={"sm"}>
           Deposit
         </Button>
         <div className="flex gap-2 items-center">
@@ -36,5 +36,5 @@ export default async function Header({}: Props) {
         </div>
       </div>
     </div>
-  )
+  );
 }

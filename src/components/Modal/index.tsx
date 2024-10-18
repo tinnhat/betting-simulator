@@ -12,7 +12,6 @@ import { useState } from 'react'
 import { Button } from '../ui/button'
 import { Input } from '../ui/input'
 import { useRouter } from 'next/navigation'
-import revalidateTag from '@/lib/revalidatePath'
 
 type Props = {
   isOpen: boolean
@@ -48,8 +47,7 @@ function Modal({ isOpen, setIsOpen, oddChoose }: Props) {
       })
       if (result.ok) {
         // window.location.reload();
-        // router.refresh() // refresh to get new data (but only for server component) and it NOT reload page to call api
-        revalidateTag("refresh");
+        router.refresh() // refresh to get new data (but only for server component) and it NOT reload page to call api
         /*
           router.refresh(): Refresh the current route. Making a new request to the server, re-fetching data requests, 
           and re-rendering Server Components. The client will merge the updated React Server Component payload 
