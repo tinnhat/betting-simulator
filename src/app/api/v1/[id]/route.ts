@@ -13,3 +13,4 @@ export async function GET(nextRequest: NextRequest, { params }: { params: { id: 
     return NextResponse.json({ error }, { status: 500 })
   }
 }
+export const revalidate = 0;
