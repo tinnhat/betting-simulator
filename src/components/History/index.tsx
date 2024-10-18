@@ -1,193 +1,68 @@
+import { ResultBet } from '@/app/types'
+import { convertToVND } from '@/lib/utils'
 import React from 'react'
 
 type Props = {}
 
-export default function History({}: Props) {
+export default async function History({}: Props) {
+  const listHistory = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/result/1`,
+    {
+      cache: 'no-store', // the latest data is fetched on each request
+    }
+  ).then((res) => res.json())
+  console.log(listHistory)
+
   return (
-    <div className='w-1/5 bg-slate-800 rounded-md min-h-full overflow-y-auto'>
-      <div className='p-4'>
-        <h1 className='text-green-600 font-bold'>History</h1>
-        <ul className='mt-2 flex flex-col gap-4'>
-          <li className='flex flex-col border-t-2 border-solid border-gray-200 pt-2'>
-            <div className='flex gap-4 items-center'>
-              <p>
-                Germany <span className='text-blue-400'>(H)</span>
+    <div className="w-1/5 bg-slate-800 rounded-md min-h-full overflow-y-auto">
+      <div className="p-4 text-gray-300">
+        <h1 className="text-green-600 font-bold">History</h1>
+        <ul className="mt-2 flex flex-col gap-4">
+          {listHistory.result.map((item: ResultBet) => (
+            <li
+              key={item.id}
+              className="flex flex-col border-t-2 border-solid border-gray-200 pt-2"
+            >
+              <p className="text-sm">
+                Match day:{' '}
+                {new Date(item.date_of_match).toLocaleDateString('vi-VN')}
               </p>
-              <p className='text-sm text-yellow-400'>vs</p>
-              <p>Scotland</p>
-            </div>
-            <div className='text-sm flex justify-between'>
-              <p>Odd: Over 2.5</p>
-              <p className='text-teal-400'>25.000.000 Đ</p>
-            </div>
-            <div>
-              <p className='font-semibold text-sm'>
-                Result: <span className='text-green-400'> + 2.000.000 Đ</span>
+              {item.home_team.includes('Over') ||
+              item.home_team.includes('Under') ? (
+                <div className="flex gap-4 items-center text-sm">
+                  <p>{item.home_team.includes('Over') ? 'Over' : 'Under'}</p>
+                </div>
+              ) : (
+                <div className="flex gap-4 items-center text-sm">
+                  <p>
+                    {item.home_team} <span className="text-blue-400">(H)</span>
+                  </p>
+                  <p className="text-sm text-yellow-400">vs</p>
+                  <p>{item.away_team}</p>
+                </div>
+              )}
+
+              <p className="text-sm">
+                Team choose:{' '}
+                <span className="font-semibold">{item.teamchoose}</span>
               </p>
-            </div>
-          </li>
-          <li className='flex flex-col border-t-2 border-solid border-gray-200 pt-2'>
-            <div className='flex gap-4 items-center'>
-              <p>
-                Germany <span className='text-blue-400'>(H)</span>
-              </p>
-              <p className='text-sm text-yellow-400'>vs</p>
-              <p>Scotland</p>
-            </div>
-            <div className='text-sm flex justify-between'>
-              <p>Odd: Over 2.5</p>
-              <p className='text-teal-400'>25.000.000 Đ</p>
-            </div>
-            <div>
-              <p className='font-semibold text-sm'>
-                Result: <span className='text-green-400'> + 2.000.000 Đ</span>
-              </p>
-            </div>
-          </li>
-          <li className='flex flex-col border-t-2 border-solid border-gray-200 pt-2'>
-            <div className='flex gap-4 items-center'>
-              <p>
-                Germany <span className='text-blue-400'>(H)</span>
-              </p>
-              <p className='text-sm text-yellow-400'>vs</p>
-              <p>Scotland</p>
-            </div>
-            <div className='text-sm flex justify-between'>
-              <p>Odd: Over 2.5</p>
-              <p className='text-teal-400'>25.000.000 Đ</p>
-            </div>
-            <div>
-              <p className='font-semibold text-sm'>
-                Result: <span className='text-green-400'> + 2.000.000 Đ</span>
-              </p>
-            </div>
-          </li>
-          <li className='flex flex-col border-t-2 border-solid border-gray-200 pt-2'>
-            <div className='flex gap-4 items-center'>
-              <p>
-                Germany <span className='text-blue-400'>(H)</span>
-              </p>
-              <p className='text-sm text-yellow-400'>vs</p>
-              <p>Scotland</p>
-            </div>
-            <div className='text-sm flex justify-between'>
-              <p>Odd: Over 2.5</p>
-              <p className='text-teal-400'>25.000.000 Đ</p>
-            </div>
-            <div>
-              <p className='font-semibold text-sm'>
-                Result: <span className='text-red-400'> - 2.000.000 Đ</span>
-              </p>
-            </div>
-          </li>
-          <li className='flex flex-col border-t-2 border-solid border-gray-200 pt-2'>
-            <div className='flex gap-4 items-center'>
-              <p>
-                Germany <span className='text-blue-400'>(H)</span>
-              </p>
-              <p className='text-sm text-yellow-400'>vs</p>
-              <p>Scotland</p>
-            </div>
-            <div className='text-sm flex justify-between'>
-              <p>Odd: Over 2.5</p>
-              <p className='text-teal-400'>25.000.000 Đ</p>
-            </div>
-            <div>
-              <p className='font-semibold text-sm'>
-                Result: <span className='text-red-400'> - 2.000.000 Đ</span>
-              </p>
-            </div>
-          </li>
-          <li className='flex flex-col border-t-2 border-solid border-gray-200 pt-2'>
-            <div className='flex gap-4 items-center'>
-              <p>
-                Germany <span className='text-blue-400'>(H)</span>
-              </p>
-              <p className='text-sm text-yellow-400'>vs</p>
-              <p>Scotland</p>
-            </div>
-            <div className='text-sm flex justify-between'>
-              <p>Odd: Over 2.5</p>
-              <p className='text-teal-400'>25.000.000 Đ</p>
-            </div>
-            <div>
-              <p className='font-semibold text-sm'>
-                Result: <span className='text-red-400'> - 2.000.000 Đ</span>
-              </p>
-            </div>
-          </li>
-          <li className='flex flex-col border-t-2 border-solid border-gray-200 pt-2'>
-            <div className='flex gap-4 items-center'>
-              <p>
-                Germany <span className='text-blue-400'>(H)</span>
-              </p>
-              <p className='text-sm text-yellow-400'>vs</p>
-              <p>Scotland</p>
-            </div>
-            <div className='text-sm flex justify-between'>
-              <p>Odd: Over 2.5</p>
-              <p className='text-teal-400'>25.000.000 Đ</p>
-            </div>
-            <div>
-              <p className='font-semibold text-sm'>
-                Result: <span className='text-red-400'> - 2.000.000 Đ</span>
-              </p>
-            </div>
-          </li>
-          <li className='flex flex-col border-t-2 border-solid border-gray-200 pt-2'>
-            <div className='flex gap-4 items-center'>
-              <p>
-                Germany <span className='text-blue-400'>(H)</span>
-              </p>
-              <p className='text-sm text-yellow-400'>vs</p>
-              <p>Scotland</p>
-            </div>
-            <div className='text-sm flex justify-between'>
-              <p>Odd: Over 2.5</p>
-              <p className='text-teal-400'>25.000.000 Đ</p>
-            </div>
-            <div>
-              <p className='font-semibold text-sm'>
-                Result: <span className='text-red-400'> - 2.000.000 Đ</span>
-              </p>
-            </div>
-          </li>
-          <li className='flex flex-col border-t-2 border-solid border-gray-200 pt-2'>
-            <div className='flex gap-4 items-center'>
-              <p>
-                Germany <span className='text-blue-400'>(H)</span>
-              </p>
-              <p className='text-sm text-yellow-400'>vs</p>
-              <p>Scotland</p>
-            </div>
-            <div className='text-sm flex justify-between'>
-              <p>Odd: Over 2.5</p>
-              <p className='text-teal-400'>25.000.000 Đ</p>
-            </div>
-            <div>
-              <p className='font-semibold text-sm'>
-                Result: <span className='text-red-400'> - 2.000.000 Đ</span>
-              </p>
-            </div>
-          </li>
-          <li className='flex flex-col border-t-2 border-solid border-gray-200 pt-2'>
-            <div className='flex gap-4 items-center'>
-              <p>
-                Germany <span className='text-blue-400'>(H)</span>
-              </p>
-              <p className='text-sm text-yellow-400'>vs</p>
-              <p>Scotland</p>
-            </div>
-            <div className='text-sm flex justify-between'>
-              <p>Odd: Over 2.5</p>
-              <p className='text-teal-400'>25.000.000 Đ</p>
-            </div>
-            <div>
-              <p className='font-semibold text-sm'>
-                Result: <span className='text-red-400'> - 2.000.000 Đ</span>
-              </p>
-            </div>
-          </li>
+              <div className="text-sm flex justify-between">
+                <p>
+                  Odd: {item.odd} {item.rate}
+                </p>
+
+                <p className="text-teal-400">{convertToVND(item.money_bet)}</p>
+              </div>
+              <div>
+                <p className="text-sm">
+                  Result:{' '}
+                  <span className="text-green-400">
+                    {convertToVND(item.money_result)}
+                  </span>
+                </p>
+              </div>
+            </li>
+          ))}
         </ul>
       </div>
     </div>
