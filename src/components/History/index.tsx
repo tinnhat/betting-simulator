@@ -1,6 +1,7 @@
 import { ResultBet } from '@/app/types'
 import { convertToVND } from '@/lib/utils'
 import DeleteBtn from './DeleteBtn'
+import HistoryDynamic from './HistoryDynamic'
 type Props = {}
 
 export const dynamic = 'force-dynamic'
@@ -28,23 +29,17 @@ export default async function History({}: Props) {
                   {new Date(item.date_of_match).toLocaleDateString('vi-VN')}
                 </p>
                 {new Date(item.date_of_match) > new Date() && (
-                  <DeleteBtn id={item.id}/>
+                  <DeleteBtn id={item.id} />
                 )}
               </div>
-              {item.home_team.includes('Over') ||
-              item.home_team.includes('Under') ? (
-                <div className="flex gap-4 items-center text-sm">
-                  <p>{item.home_team.includes('Over') ? 'Over' : 'Under'}</p>
-                </div>
-              ) : (
-                <div className="flex gap-4 items-center text-sm">
-                  <p>
-                    {item.home_team} <span className="text-blue-400">(H)</span>
-                  </p>
-                  <p className="text-sm text-yellow-400">vs</p>
-                  <p>{item.away_team}</p>
-                </div>
-              )}
+
+              <div className="flex gap-4 items-center text-sm">
+                <p>
+                  {item.home_team} <span className="text-blue-400">(H)</span>
+                </p>
+                <p className="text-sm text-yellow-400">vs</p>
+                <p>{item.away_team}</p>
+              </div>
 
               <p className="text-sm">
                 Team choose:{' '}
@@ -59,10 +54,7 @@ export default async function History({}: Props) {
               </div>
               <div>
                 <p className="text-sm">
-                  Result:{' '}
-                  <span className="text-green-400">
-                    {convertToVND(item.money_result)}
-                  </span>
+                  Result: <HistoryDynamic item={item} />
                 </p>
               </div>
             </li>

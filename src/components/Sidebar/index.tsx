@@ -12,30 +12,6 @@ export default function Sidebar({}: Props) {
           <IoIosFootball className='mr-2' />
           <p>Football</p>
         </li>
-        <li className='flex items-center '>
-          <IoIosFootball className='mr-2' />
-          <p>Football</p>
-        </li>
-        <li className='flex items-center '>
-          <IoIosFootball className='mr-2' />
-          <p>Football</p>
-        </li>
-        <li className='flex items-center '>
-          <IoIosFootball className='mr-2' />
-          <p>Football</p>
-        </li>
-        <li className='flex items-center '>
-          <IoIosFootball className='mr-2' />
-          <p>Football</p>
-        </li>
-        <li className='flex items-center '>
-          <IoIosFootball className='mr-2' />
-          <p>Football</p>
-        </li>
-        <li className='flex items-center '>
-          <IoIosFootball className='mr-2' />
-          <p>Football</p>
-        </li>
       </ul>
     </div>
   )

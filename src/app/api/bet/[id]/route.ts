@@ -44,6 +44,9 @@ export async function DELETE(
     loggingInformation('Remove bet success', '')
     return NextResponse.json({ message: 'Remove bet success' }, { status: 200 })
   } catch (error) {
+    await sql`ROLLBACK`;
+    loggingInformation(`Remove bet failed: ${error}`, "error");
+    loggingInformation(`Rollback success`, "info");
     console.error('Error connecting to database:', error)
     return NextResponse.json({ error }, { status: 500 })
   }

@@ -1,10 +1,4 @@
 'use client'
-import React, { useEffect, useState } from 'react'
-import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar'
-import Modal from '../Modal'
-import { useToast } from '@/hooks/use-toast'
-import { Button } from '../ui/button'
-import { dataMock } from './mockData'
 import {
   BookmakerInfo,
   MarketsInfo,
@@ -13,6 +7,11 @@ import {
   OddInfo,
   OutComes,
 } from '@/app/types'
+import { useToast } from '@/hooks/use-toast'
+import { useEffect, useState } from 'react'
+import Modal from '../Modal'
+import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar'
+import { Button } from '../ui/button'
 import { Skeleton } from '../ui/skeleton'
 
 type Props = {}
@@ -61,7 +60,7 @@ export default function Bet({}: Props) {
     setLoading(true)
     try {
       const response = await fetch(
-        `https://api.the-odds-api.com/v4/sports/soccer_epl/events/${eventid}/odds?apiKey=${process.env.NEXT_PUBLIC_THE_ODDS_API_KEY}&regions=uk&markets=h2h,spreads,totals`
+        `https://api.the-odds-api.com/v4/sports/soccer_epl/events/${eventid}/odds?apiKey=${process.env.NEXT_PUBLIC_THE_ODDS_API_KEY}&regions=uk&markets=h2h`
       )
       const result = await response.json()
       setOddBets(result)
@@ -133,21 +132,9 @@ export default function Bet({}: Props) {
   ) => {
     let homeTeam = ''
     let awayTeam = ''
-    switch (teamChoose) {
-      case 'Draw':
-        homeTeam = 'Draw'
-        awayTeam = 'Draw'
-        break
-      default:
-        homeTeam = home_team ?? teamChoose
-        awayTeam = away_team ?? teamChoose
-        break
-    }
-    //check over/ under
-    if (teamChoose.includes('Over') || teamChoose.includes('Under')) {
-      homeTeam = teamChoose
-      awayTeam = teamChoose
-    }
+    homeTeam = home_team ?? teamChoose
+    awayTeam = away_team ?? teamChoose
+
     setOddChoose({
       market,
       odd,
@@ -249,38 +236,42 @@ export default function Bet({}: Props) {
                           </div>
                           <div className="w-5/6 flex justify-between items-center text-sm text-gray-200">
                             {market.outcomes.map(
-                              (outcome: OutComes, index: number) => (
-                                <div key={index} className="w-1/3 text-center">
-                                  <p className="whitespace-pre-wrap">
-                                    {outcome.name}{' '}
-                                    {outcome.point && (
-                                      <span className="text-red-500">
-                                        ({outcome.point})
+                              (outcome: OutComes, index: number) =>
+                                outcome.name === 'Draw' ? null : (
+                                  <div
+                                    key={index}
+                                    className="w-1/3 text-center"
+                                  >
+                                    <p className="whitespace-pre-wrap">
+                                      {outcome.name}{' '}
+                                      {outcome.point && (
+                                        <span className="text-red-500">
+                                          ({outcome.point})
+                                        </span>
+                                      )}
+                                      <span
+                                        onClick={() =>
+                                          handleChooseBet(
+                                            oddBets?.home_team,
+                                            oddBets?.away_team,
+                                            market.key,
+                                            outcome.price,
+                                            `${outcome.name}${
+                                              outcome.point ?? ''
+                                            }`,
+                                            oddBets?.id,
+                                            item.key,
+                                            oddBets?.sport_title,
+                                            oddBets?.commence_time
+                                          )
+                                        }
+                                        className="text-green-400 cursor-pointer hover:text-green-200 transition-colors duration-300 ml-4"
+                                      >
+                                        {outcome.price}
                                       </span>
-                                    )}
-                                    <span
-                                      onClick={() =>
-                                        handleChooseBet(
-                                          dataMock.home_team,
-                                          dataMock.away_team,
-                                          market.key,
-                                          outcome.price,
-                                          `${outcome.name}${
-                                            outcome.point ?? ''
-                                          }`,
-                                          dataMock.id,
-                                          item.key,
-                                          dataMock.sport_title,
-                                          dataMock.commence_time
-                                        )
-                                      }
-                                      className="text-green-400 cursor-pointer hover:text-green-200 transition-colors duration-300 ml-4"
-                                    >
-                                      {outcome.price}
-                                    </span>
-                                  </p>
-                                </div>
-                              )
+                                    </p>
+                                  </div>
+                                )
                             )}
                           </div>
                         </div>
