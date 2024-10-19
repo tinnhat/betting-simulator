@@ -46,7 +46,7 @@ export default function HistoryDynamic({ item }: Props) {
     const datePart = dateObj.toISOString().substring(0, 10)
     const dateObjNow = new Date()
     const datePartNow = dateObjNow.toISOString().substring(0, 10)
-    const filter = data.result.filter(
+    const filter = data.results.filter(
       (val: any) => val.dateEvent === datePart && val.dateEvent < datePartNow
     )
     //1 match 1 day
@@ -114,7 +114,14 @@ export default function HistoryDynamic({ item }: Props) {
   useEffect(() => {
     // Poll every 10 seconds (10000 milliseconds)
     const interval = setInterval(() => {
-      fetchResult()
+      const dateObj = new Date(item.date_of_match)
+      const datePart = dateObj.toISOString().substring(0, 10)
+      const dateObjNow = new Date()
+      const datePartNow = dateObjNow.toISOString().substring(0, 10)
+      if (datePart > datePartNow) {
+        //next day will have result
+        fetchResult()
+      }
     }, 10000)
     return () => clearInterval(interval) // Clean up on component unmount
   }, [])
