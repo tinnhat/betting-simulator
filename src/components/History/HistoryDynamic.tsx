@@ -2,6 +2,7 @@
 'use client'
 import { ResultBet } from '@/app/types'
 import { convertToVND } from '@/lib/utils'
+import { useRouter } from 'next/navigation'
 import { useEffect } from 'react'
 type Props = {
   item: ResultBet
@@ -16,6 +17,7 @@ const checkMath = (infoHomeTeam: any, infoAwayTeam: any) => {
 }
 
 export default function HistoryDynamic({ item }: Props) {
+  const router = useRouter()
   const updateMoneyResult = async (data: any) => {
     try {
       await fetch(
@@ -28,6 +30,7 @@ export default function HistoryDynamic({ item }: Props) {
           body: JSON.stringify(data),
         }
       )
+      router.refresh()
     } catch (error) {
       console.log(error)
     }
